@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valora Beauty | Luxury Skincare & Cosmetics</title>
+    <meta name="description" content="Discover premium beauty products with Valora Beauty. Luxury skincare, makeup, and fragrances crafted for the discerning.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --color-background: #fdf5f0;
+            --color-foreground: #222222;
+            --color-accent: #a67c52;
+        }
+        
+        html {
+            background-color: var(--color-background);
+        }
+        
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .font-sans {
+            font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        .text-foreground {
+            color: var(--color-foreground);
+        }
+        
+        .text-accent {
+            color: var(--color-accent);
+        }
+        
+        .bg-accent {
+            background-color: var(--color-accent);
+        }
+        
+        .border-accent {
+            border-color: var(--color-accent);
+        }
+        
+        /* Navbar styles */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            z-index: 50;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        
+        body {
+            padding-top: 80px;
+        }
+        
+        /* Hero slider */
+        .hero-slide {
+            display: none;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        
+        .hero-slide.active {
+            display: flex;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        /* Wishlist button */
+        .wishlist-btn {
+            transition: transform 0.2s ease;
+        }
+        
+        .wishlist-btn.active {
+            transform: scale(1.2);
+            color: var(--color-accent);
+        }
+        
+        /* Product card hover */
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Cart badge */
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--color-accent);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .navbar-link {
+            position: relative;
+            text-decoration: none;
+        }
+        
+        .navbar-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--color-accent);
+            transition: width 0.3s ease;
+        }
+        
+        .navbar-link:hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="font-sans text-foreground">
+    <!-- Navigation -->
+    <nav class="h-20 flex items-center justify-between px-6 md:px-12">
+        <div class="text-2xl font-serif font-bold tracking-wide">Valora</div>
+        
+        <div class="hidden md:flex gap-8 absolute left-1/2 transform -translate-x-1/2">
+            <a href="#" class="navbar-link text-sm tracking-wide">SHOP</a>
+            <a href="#" class="navbar-link text-sm tracking-wide">COLLECTIONS</a>
+            <a href="#" class="navbar-link text-sm tracking-wide">ABOUT</a>
+            <a href="#" class="navbar-link text-sm tracking-wide">CONTACT</a>
+        </div>
+        
+        <div class="flex gap-6 items-center">
+            <button aria-label="Search" title="Search">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </button>
+            <button aria-label="Account" title="Account">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+            </button>
+            <button class="wishlist-btn" aria-label="Wishlist" title="Wishlist" onclick="this.classList.toggle('active')">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
+            </button>
+            <button class="relative" aria-label="Cart" title="Cart">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                <div class="cart-badge">3</div>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Slider -->
+    <section class="relative w-full h-screen bg-gradient-to-b from-white via-white to-red-50 overflow-hidden">
+        <div class="hero-slide active absolute inset-0 flex items-center justify-between px-6 md:px-12 fadeIn">
+            <div class="w-full md:w-1/2 space-y-6">
+                <div class="inline-block bg-accent/10 px-4 py-2 rounded">
+                    <p class="text-accent text-xs tracking-widest font-semibold">NEW ARRIVALS</p>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-serif font-bold leading-tight text-balance">
+                    Radiant Glow Serum
+                </h1>
+                <p class="text-lg text-gray-600 leading-relaxed max-w-md">
+                    Discover our revolutionary serum infused with rare botanicals. Experience transformative skincare like never before.
+                </p>
+                <div class="flex gap-4 pt-4">
+                    <button class="bg-foreground text-white px-8 py-3 rounded text-sm tracking-wide font-semibold hover:opacity-90 transition">SHOP NOW</button>
+                    <button class="border border-foreground px-8 py-3 rounded text-sm tracking-wide font-semibold hover:bg-foreground/5 transition">LEARN MORE</button>
+                </div>
+            </div>
+            <div class="hidden md:block w-1/2 h-full bg-gradient-to-br from-amber-100 to-orange-100 rounded-3xl"></div>
+        </div>
+
+        <div class="hero-slide absolute inset-0 flex items-center justify-between px-6 md:px-12">
+            <div class="w-full md:w-1/2 space-y-6">
+                <div class="inline-block bg-accent/10 px-4 py-2 rounded">
+                    <p class="text-accent text-xs tracking-widest font-semibold">COLLECTION</p>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-serif font-bold leading-tight text-balance">
+                    Luxury Lipstick
+                </h1>
+                <p class="text-lg text-gray-600 leading-relaxed max-w-md">
+                    Velvety matte or rich satin finishes. Long-lasting color that speaks elegance.
+                </p>
+                <div class="flex gap-4 pt-4">
+                    <button class="bg-foreground text-white px-8 py-3 rounded text-sm tracking-wide font-semibold hover:opacity-90 transition">EXPLORE</button>
+                </div>
+            </div>
+            <div class="hidden md:block w-1/2 h-full bg-gradient-to-br from-rose-100 to-pink-100 rounded-3xl"></div>
+        </div>
+
+        <!-- Slider Controls -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+            <button class="dot w-3 h-3 rounded-full bg-foreground opacity-100 transition" onclick="changeSlide(0)"></button>
+            <button class="dot w-3 h-3 rounded-full bg-foreground opacity-30 transition" onclick="changeSlide(1)"></button>
+        </div>
+        
+        <!-- Arrow Controls -->
+        <button class="absolute left-6 top-1/2 -translate-y-1/2 p-2 hover:opacity-60 transition z-10" onclick="prevSlide()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+        </button>
+        <button class="absolute right-6 top-1/2 -translate-y-1/2 p-2 hover:opacity-60 transition z-10" onclick="nextSlide()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+        </button>
+    </section>
+
+    <!-- Featured In -->
+    <section class="py-12 md:py-16 px-6 md:px-12 bg-white border-y border-gray-200">
+        <p class="text-center text-xs tracking-widest text-gray-500 uppercase mb-8">Featured In</p>
+        <div class="flex flex-wrap justify-center gap-8 md:gap-12 items-center">
+            <div class="text-gray-400 font-semibold text-lg">VOGUE</div>
+            <div class="text-gray-400 font-semibold text-lg">Harper's Bazaar</div>
+            <div class="text-gray-400 font-semibold text-lg">ELLE</div>
+            <div class="text-gray-400 font-semibold text-lg">Cosmopolitan</div>
+        </div>
+    </section>
+
+    <!-- Collections Grid -->
+    <section class="py-16 md:py-24 px-6 md:px-12">
+        <h2 class="text-4xl md:text-5xl font-serif font-bold text-center mb-16 text-balance">Explore Our Collections</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Skincare -->
+            <div class="relative group cursor-pointer overflow-hidden rounded-lg h-80 bg-gradient-to-br from-green-50 to-emerald-100 flex items-end p-8 transition-transform duration-300 hover:scale-105">
+                <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-black/20"></div>
+                <div class="relative z-10">
+                    <h3 class="text-3xl font-serif font-bold mb-2">Skincare</h3>
+                    <p class="text-sm">Discover our curated skincare collection</p>
+                </div>
+            </div>
+
+            <!-- Makeup -->
+            <div class="relative group cursor-pointer overflow-hidden rounded-lg h-80 bg-gradient-to-br from-pink-50 to-rose-100 flex items-end p-8 transition-transform duration-300 hover:scale-105">
+                <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-black/20"></div>
+                <div class="relative z-10">
+                    <h3 class="text-3xl font-serif font-bold mb-2">Makeup</h3>
+                    <p class="text-sm">Express yourself with our makeup range</p>
+                </div>
+            </div>
+
+            <!-- Fragrance -->
+            <div class="relative group cursor-pointer overflow-hidden rounded-lg h-80 bg-gradient-to-br from-purple-50 to-violet-100 flex items-end p-8 transition-transform duration-300 hover:scale-105">
+                <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-black/20"></div>
+                <div class="relative z-10">
+                    <h3 class="text-3xl font-serif font-bold mb-2">Fragrance</h3>
+                    <p class="text-sm">Signature scents for every occasion</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="py-16 md:py-24 px-6 md:px-12 bg-white">
+        <h2 class="text-4xl md:text-5xl font-serif font-bold text-center mb-4 text-balance">Bestsellers</h2>
+        <p class="text-center text-gray-600 mb-16">Handpicked products loved by our community</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Product 1 -->
+            <div class="product-card bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-accent transition">
+                <div class="bg-gradient-to-br from-blue-50 to-cyan-100 h-64 flex items-center justify-center">
+                    <div class="text-center">
+                        <div class="text-6xl">✨</div>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <p class="text-xs tracking-widest text-gray-500 mb-2">SKINCARE</p>
+                    <h3 class="text-lg font-semibold mb-2">Luminous Serum</h3>
+                    <div class="flex gap-1 mb-3">
+                        <span class="text-accent">★</span>
+                        <span class="text-accent">★</span>
+                        <span class="text-accent">★</span>
+                        <span class="text-accent">★</span>
+                        <span class="text-accent">★</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-4 leading-relaxed">Radiant-boosting serum with hyaluronic acid</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-accent font-semibold text-lg">$89.00</span>
+                        <button class="bg-accent text-white px-4 py-2 rounded text-xs font-semibold hover:opacity-90 transition">ADD</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-accent transition">
+                <div class="bg-gradient-to-br from-rose-50 to-pink-100 h-64 flex items-center justify-center">
+                    <div class="text-center">
+                        <div class="text-6xl">💄</div>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <p class="text-xs tracking-widest text-gray-500 mb-2">MAKEUP</p>
+                    <h3 class="text-lg font-semibold mb-2">Velvet Lip Color</h3>
+                    <div class="flex gap-1 mb-3">
+                        <span class="text-accent">★</span>
+                        <span class="text-accent">★</span>
+                        <span class="text-accent">★</span>
+                        <span class="text-accent">★</span>
+                        <span class="text-accent">★</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-4 leading-relaxed">Luxe matte finish lipstick in signature shades</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-accent font-semibold text-lg">$42.00</span>
+                        <button class="bg-accent text-white px-4 py-2 rounded text-xs font-semibold hover:opacity-90 transition">ADD</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-accent transition">
+                <div class="bg-gradient-to-br from-amber-50 to-orange-100 h-64 flex items-center justify-center">
+                    <div class="text-center">
+                        <div class="text-6xl">🧴</div>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <p class="text-xs tracking-widest text-gray-500 mb-2">SKINCARE</p>
+                    <h3 class="text-lg font-semibold mb-2">Gold Night Cream</h3>
+                    <div class="flex gap-1 mb-3">
+                        <span class="text-accent">★</span>
+                        <span class="text-accent">★</span>
+                        <span class="text-accent">★</span>
+                        <span class="text-accent">★</span>
+                        <span class="text-gray-300">★</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-4 leading-relaxed">Nourishing night cream with gold particles</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-accent font-semibold text-lg">$125.00</span>
+                        <button class="bg-accent text-white px-4 py-2 rounded text-xs font-semibold hover:opacity-90 transition">ADD</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product-card bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-accent transition">
+                <div class="bg-gradient-to-br from-purple-50 to-violet-100 h-64 flex items-center justify-center">
+                    <div class="text-center">
+                        <div class="text-6xl">🌹</div>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <p class="text-xs tracking-widest text-gray-500 mb-2">FRAGRANCE</p>
+                    <h3 class="text-lg font-semibold mb-2">Rose Essence</h3>
+                    <div class="flex gap-1 mb-3">
+                        <span class="text-accent">★</span>
+                        <span class="text-accent">★</span>
+                        <span class="text-accent">★</span>
+                        <span class="text-accent">★</span>
+                        <span class="text-accent">★</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-4 leading-relaxed">Timeless floral fragrance with musky notes</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-accent font-semibold text-lg">$165.00</span>
+                        <button class="bg-accent text-white px-4 py-2 rounded text-xs font-semibold hover:opacity-90 transition">ADD</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-16 md:py-24 px-6 md:px-12 bg-gradient-to-r from-foreground to-accent text-white">
+        <div class="max-w-2xl mx-auto text-center">
+            <h2 class="text-4xl font-serif font-bold mb-4">Stay Updated</h2>
+            <p class="text-lg mb-8 opacity-90">Subscribe to receive exclusive offers and beauty tips</p>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <input type="email" placeholder="Enter your email" class="flex-1 px-6 py-3 rounded text-foreground placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-white">
+                <button class="bg-white text-accent px-8 py-3 rounded font-semibold hover:opacity-90 transition">Subscribe</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-12 md:py-16 px-6 md:px-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            <!-- About -->
+            <div>
+                <h3 class="font-serif text-lg font-bold mb-4">Valora Beauty</h3>
+                <p class="text-sm text-gray-600 leading-relaxed">Crafting luxury beauty products that celebrate individuality and natural radiance.</p>
+            </div>
+
+            <!-- Customer Service -->
+            <div>
+                <h4 class="font-semibold mb-4 uppercase text-xs tracking-widest">Customer Service</h4>
+                <ul class="space-y-3 text-sm text-gray-600">
+                    <li><a href="#" class="hover:text-foreground transition">Contact Us</a></li>
+                    <li><a href="#" class="hover:text-foreground transition">Shipping Info</a></li>
+                    <li><a href="#" class="hover:text-foreground transition">Returns</a></li>
+                    <li><a href="#" class="hover:text-foreground transition">FAQ</a></li>
+                </ul>
+            </div>
+
+            <!-- Company -->
+            <div>
+                <h4 class="font-semibold mb-4 uppercase text-xs tracking-widest">Company</h4>
+                <ul class="space-y-3 text-sm text-gray-600">
+                    <li><a href="#" class="hover:text-foreground transition">About Us</a></li>
+                    <li><a href="#" class="hover:text-foreground transition">Blog</a></li>
+                    <li><a href="#" class="hover:text-foreground transition">Careers</a></li>
+                    <li><a href="#" class="hover:text-foreground transition">Sustainability</a></li>
+                </ul>
+            </div>
+
+            <!-- Social -->
+            <div>
+                <h4 class="font-semibold mb-4 uppercase text-xs tracking-widest">Follow Us</h4>
+                <div class="flex gap-4">
+                    <a href="#" class="text-gray-600 hover:text-accent transition" title="Instagram">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-600 hover:text-accent transition" title="Facebook">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-600 hover:text-accent transition" title="Twitter">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8.29 20c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-7.104 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-200 pt-8 text-center text-sm text-gray-600">
+            <p>&copy; 2024 Valora Beauty. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.dot');
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.style.opacity = '0.3');
+            
+            slides[n].classList.add('active');
+            dots[n].style.opacity = '1';
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        function changeSlide(n) {
+            currentSlide = n;
+            showSlide(currentSlide);
+        }
+
+        // Auto-advance slides every 8 seconds
+        setInterval(nextSlide, 8000);
+    </script>
+</body>
+</html>

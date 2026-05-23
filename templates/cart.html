@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block title %}Shopping Cart - Valora Beauty{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <!-- Page Header -->
+    <div class="mb-12">
+        <h1 class="section-title">Shopping Cart</h1>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <!-- Cart Items -->
+        <div class="lg:col-span-2">
+            <div class="bg-white border rounded-lg p-8" style="border-color: var(--border);">
+                <div id="cart-page-items" class="space-y-8">
+                    <div class="text-center py-12 text-gray-500">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                        </svg>
+                        <p>Your cart is empty</p>
+                        <a href="{% url 'store:shop' %}" class="btn-primary inline-block mt-6">Continue Shopping</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="lg:col-span-1">
+            <div class="bg-white border rounded-lg p-8 sticky top-28" style="border-color: var(--border);">
+                <h3 class="font-serif text-xl font-semibold mb-6">Order Summary</h3>
+                
+                <div class="space-y-4 mb-6 pb-6 border-b" style="border-color: var(--border);">
+                    <div class="flex justify-between text-gray-600">
+                        <span>Subtotal</span>
+                        <span id="cart-subtotal">$0.00</span>
+                    </div>
+                    <div class="flex justify-between text-gray-600">
+                        <span>Shipping</span>
+                        <span class="text-green-600">Free</span>
+                    </div>
+                    <div class="flex justify-between text-gray-600">
+                        <span>Tax</span>
+                        <span id="cart-tax">$0.00</span>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <div class="flex justify-between text-lg font-semibold">
+                        <span>Total</span>
+                        <span id="cart-page-total" class="text-accent">$0.00</span>
+                    </div>
+                </div>
+
+                <button class="btn-primary w-full mb-4">Proceed to Checkout</button>
+                <a href="{% url 'store:shop' %}" class="btn-secondary w-full text-center block">Continue Shopping</a>
+
+                <!-- Promo Code -->
+                <div class="mt-8 pt-6 border-t" style="border-color: var(--border);">
+                    <label class="block text-sm font-semibold mb-2">Promo Code</label>
+                    <div class="flex gap-2">
+                        <input type="text" placeholder="Enter code" class="input-field flex-1 text-sm">
+                        <button class="btn-secondary px-4 py-2">Apply</button>
+                    </div>
+                </div>
+
+                <!-- Order Protection -->
+                <div class="mt-8 pt-6 border-t" style="border-color: var(--border);">
+                    <div class="flex gap-3 text-sm">
+                        <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <div>
+                            <p class="font-semibold mb-1">Secure Checkout</p>
+                            <p class="text-gray-500">Your payment is protected by Stripe</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateCartPageDisplay() {
+        const cart = JSON.parse(localStorage.getItem('valora_cart')) || [];
+        const cartItemsContainer = document.getElementById('cart-page-items');
+        
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = `
+                <div class="text-center py-12 text-gray-500">
+                    <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                    </svg>
+                    <p>Your cart is empty</p>
+                    <a href="/shop/" class="btn-primary inline-block mt-6">Continue Shopping</a>
+                </div>
+            `;
+            document.getElementById('cart-subtotal').textContent = '$0.00';
+            document.getElementById('cart-tax').textContent = '$0.00';
+            document.getElementById('cart-page-total').textContent = '$0.00';
+            return;
+        }
+
+        let subtotal = 0;
+        cartItemsContainer.innerHTML = cart.map(item => {
+            subtotal += item.price * item.quantity;
+            return `
+                <div class="flex gap-6 pb-6 border-b" style="border-color: var(--border);">
+                    <div class="w-20 h-20 bg-gray-100 rounded flex items-center justify-center text-gray-400">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-lg mb-1">${item.name}</h3>
+                        <p class="text-accent font-semibold mb-4">$${item.price.toFixed(2)}</p>
+                        <div class="flex items-center gap-2">
+                            <button onclick="updateQuantity(${item.id}, ${item.quantity - 1})" class="px-3 py-1 border rounded hover:bg-gray-50">−</button>
+                            <span class="px-4 py-1 border rounded">${item.quantity}</span>
+                            <button onclick="updateQuantity(${item.id}, ${item.quantity + 1})" class="px-3 py-1 border rounded hover:bg-gray-50">+</button>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-lg font-semibold mb-4">$${(item.price * item.quantity).toFixed(2)}</p>
+                        <button onclick="removeFromCart(${item.id}); updateCartPageDisplay();" class="text-red-500 hover:text-red-700 transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        const tax = subtotal * 0.1; // 10% tax
+        const total = subtotal + tax;
+
+        document.getElementById('cart-subtotal').textContent = '$' + subtotal.toFixed(2);
+        document.getElementById('cart-tax').textContent = '$' + tax.toFixed(2);
+        document.getElementById('cart-page-total').textContent = '$' + total.toFixed(2);
+    }
+
+    // Update on page load
+    updateCartPageDisplay();
+</script>
+{% endblock %}

@@ -1,0 +1,341 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - Valora Beauty{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-12 sm:py-16">
+    <!-- Breadcrumb -->
+    <p class="text-xs sm:text-sm" style="color: var(--text-light); margin-bottom: clamp(1rem, 3vw, 2rem);">
+        <a href="{% url 'store:home' %}" class="hover:text-accent transition-colors">Home</a> 
+        <span style="color: var(--text-light);">/ </span>
+        <a href="{% url 'store:cart' %}" class="hover:text-accent transition-colors">Cart</a> 
+        <span style="color: var(--text-light);">/ </span>
+        <span class="text-accent font-semibold">Checkout</span>
+    </p>
+
+    <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold mb-8 sm:mb-12">Checkout</h1>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
+        <!-- Checkout Form -->
+        <div class="lg:col-span-2 space-y-6 sm:space-y-8">
+            <!-- Shipping Information -->
+            <div class="border-b pb-6 sm:pb-8" style="border-color: var(--border);">
+                <h2 class="font-serif text-xl sm:text-2xl font-bold mb-4 sm:mb-6" style="color: var(--foreground);">Shipping Address</h2>
+                <form class="space-y-3 sm:space-y-4">
+                    {% csrf_token %}
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                        <div>
+                            <label class="text-xs sm:text-sm font-semibold block mb-2" style="color: var(--foreground);">First Name</label>
+                            <input type="text" class="input-field w-full" placeholder="First Name" required>
+                        </div>
+                        <div>
+                            <label class="text-xs sm:text-sm font-semibold block mb-2" style="color: var(--foreground);">Last Name</label>
+                            <input type="text" class="input-field w-full" placeholder="Last Name" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs sm:text-sm font-semibold block mb-2" style="color: var(--foreground);">Email Address</label>
+                        <input type="email" class="input-field w-full" placeholder="ali@example.com" required>
+                    </div>
+
+                    <div>
+                        <label class="text-xs sm:text-sm font-semibold block mb-2" style="color: var(--foreground);">Address</label>
+                        <input type="text" class="input-field w-full" placeholder="123 Main Street" required>
+                    </div>
+
+                    <div>
+                        <label class="text-xs sm:text-sm font-semibold block mb-2" style="color: var(--foreground);">Apartment, Suite, etc.</label>
+                        <input type="text" class="input-field w-full" placeholder="Apt 4B (Optional)">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                        <div>
+                            <label class="text-xs sm:text-sm font-semibold block mb-2" style="color: var(--foreground);">City</label>
+                            <input type="text" class="input-field w-full" placeholder="city" required>
+                        </div>
+                        <div>
+                            <label class="text-xs sm:text-sm font-semibold block mb-2" style="color: var(--foreground);">State</label>
+                            <input type="text" class="input-field w-full" placeholder="state" required>
+                        </div>
+                        <div>
+                            <label class="text-xs sm:text-sm font-semibold block mb-2" style="color: var(--foreground);">Postal Code</label>
+                            <input type="text" class="input-field w-full" placeholder="Postal Code" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs sm:text-sm font-semibold block mb-2" style="color: var(--foreground);">Country</label>
+                        <select class="input-field w-full" required>
+                            <option value="">Select a country</option>
+                            <option value="US">United States</option>
+                            <option value="CA">Canada</option>
+                            <option value="GB">United Kingdom</option>
+                            <option value="AU">Australia</option>
+                            <option value="PK">Pakistan</option>
+                            <option value="DE">Germany</option>
+                            <option value="FR">France</option>
+                        </select>
+                    </div>
+
+                    <label class="flex items-center gap-2 text-xs sm:text-sm cursor-pointer mt-4 sm:mt-6">
+                        <input type="checkbox" checked>
+                        <span>Save this address for future orders</span>
+                    </label>
+                </form>
+            </div>
+
+            <!-- Shipping Method -->
+            <div class="border-b pb-6 sm:pb-8" style="border-color: var(--border);">
+                <h2 class="font-serif text-xl sm:text-2xl font-bold mb-4 sm:mb-6" style="color: var(--foreground);">Shipping Method</h2>
+                <div class="space-y-3">
+                    <label class="flex items-center gap-3 p-3 sm:p-4 border rounded cursor-pointer transition-all" style="border-color: var(--accent); background-color: rgba(201,160,136,0.05);">
+                        <input type="radio" name="shipping" value="standard" checked style="accent-color: var(--accent);">
+                        <div class="flex-1 min-w-0">
+                            <p class="font-semibold text-xs sm:text-sm" style="color: var(--foreground);">Standard Shipping</p>
+                            <p class="text-xs sm:text-sm" style="color: var(--text-light);">Delivery in 5-7 business days</p>
+                        </div>
+                        <span class="font-semibold text-xs sm:text-sm whitespace-nowrap" style="color: var(--accent);">FREE</span>
+                    </label>
+
+                    <label class="flex items-center gap-3 p-3 sm:p-4 border rounded cursor-pointer transition-all hover:bg-gray-50" style="border-color: var(--border);">
+                        <input type="radio" name="shipping" value="express" style="accent-color: var(--accent);">
+                        <div class="flex-1 min-w-0">
+                            <p class="font-semibold text-xs sm:text-sm" style="color: var(--foreground);">Express Shipping</p>
+                            <p class="text-xs sm:text-sm" style="color: var(--text-light);">Delivery in 2-3 business days</p>
+                        </div>
+                        <span class="font-semibold text-xs sm:text-sm whitespace-nowrap" style="color: var(--accent);">+Rs. 500</span>
+                    </label>
+
+                    <label class="flex items-center gap-3 p-3 sm:p-4 border rounded cursor-pointer transition-all hover:bg-gray-50" style="border-color: var(--border);">
+                        <input type="radio" name="shipping" value="overnight" style="accent-color: var(--accent);">
+                        <div class="flex-1 min-w-0">
+                            <p class="font-semibold text-xs sm:text-sm" style="color: var(--foreground);">Overnight Shipping</p>
+                            <p class="text-xs sm:text-sm" style="color: var(--text-light);">Delivery next business day</p>
+                        </div>
+                        <span class="font-semibold text-xs sm:text-sm whitespace-nowrap" style="color: var(--accent);">+Rs. 1,200</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Payment Information -->
+            <div class="border-b pb-6 sm:pb-8" style="border-color: var(--border);">
+                <h2 class="font-serif text-xl sm:text-2xl font-bold mb-4 sm:mb-6" style="color: var(--foreground);">Payment Method</h2>
+                <div class="space-y-3 mb-6">
+                    <label class="flex items-center gap-3 p-3 sm:p-4 border rounded cursor-pointer transition-all" style="border-color: var(--accent); background-color: rgba(201,160,136,0.05);">
+                        <input type="radio" name="payment" value="card" checked style="accent-color: var(--accent);">
+                        <span class="font-semibold text-xs sm:text-sm" style="color: var(--foreground);">💳 Credit Card</span>
+                    </label>
+
+                    <label class="flex items-center gap-3 p-3 sm:p-4 border rounded cursor-pointer transition-all hover:bg-gray-50" style="border-color: var(--border);">
+                        <input type="radio" name="payment" value="paypal" style="accent-color: var(--accent);">
+                        <span class="font-semibold text-xs sm:text-sm" style="color: var(--foreground);">🅿️ PayPal</span>
+                    </label>
+
+                    <label class="flex items-center gap-3 p-3 sm:p-4 border rounded cursor-pointer transition-all hover:bg-gray-50" style="border-color: var(--border);">
+                        <input type="radio" name="payment" value="apple" style="accent-color: var(--accent);">
+                        <span class="font-semibold text-xs sm:text-sm" style="color: var(--foreground);">🍎 Apple Pay</span>
+                    </label>
+                </div>
+
+                <!-- Credit Card Form -->
+                <div id="card-section" class="space-y-3 sm:space-y-4 p-4 sm:p-6 rounded-lg" style="background-color: rgba(201,160,136,0.03); border: 1px solid var(--border);">
+                    <div>
+                        <label class="text-xs sm:text-sm font-semibold block mb-2" style="color: var(--foreground);">Cardholder Name</label>
+                        <input type="text" class="input-field w-full" placeholder="Jane Doe" required>
+                    </div>
+
+                    <div>
+                        <label class="text-xs sm:text-sm font-semibold block mb-2" style="color: var(--foreground);">Card Number</label>
+                        <input type="text" class="input-field w-full" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                        <div>
+                            <label class="text-xs sm:text-sm font-semibold block mb-2" style="color: var(--foreground);">Expiry Date</label>
+                            <input type="text" class="input-field w-full" placeholder="MM/YY" maxlength="5" required>
+                        </div>
+                        <div>
+                            <label class="text-xs sm:text-sm font-semibold block mb-2" style="color: var(--foreground);">CVV</label>
+                            <input type="text" class="input-field w-full" placeholder="123" maxlength="3" required>
+                        </div>
+                    </div>
+
+                    <label class="flex items-center gap-2 text-xs sm:text-sm cursor-pointer mt-4">
+                        <input type="checkbox" checked>
+                        <span>Save this card for future purchases</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Promo Code -->
+            <div class="flex flex-col sm:flex-row gap-2">
+                <input type="text" placeholder="Enter promo code (e.g., SAVE10)" class="input-field flex-1" required>
+                <button class="btn-secondary px-4 sm:px-6 py-2 sm:py-3 whitespace-nowrap text-xs sm:text-sm" style="font-weight: 700;">Apply</button>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-lg border p-4 sm:p-6 lg:p-8 sticky lg:top-24" style="border-color: var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+                <h3 class="font-serif text-xl sm:text-2xl font-bold mb-4 sm:mb-6" style="color: var(--foreground);">Order Summary</h3>
+
+                <!-- Order Items - DYNAMIC FROM CART -->
+                <div id="summary-items" class="space-y-3 mb-4 sm:mb-6 pb-4 sm:pb-6 border-b" style="border-color: var(--border);">
+                    <p class="text-xs sm:text-sm" style="color: var(--text-light); text-align: center; padding: 1rem 0;">Your cart items will appear here</p>
+                </div>
+
+                <!-- Totals -->
+                <div class="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
+                    <div class="flex justify-between text-xs sm:text-sm">
+                        <span style="color: var(--text-light);">Subtotal</span>
+                        <span id="subtotal-amount" style="font-weight: 600; color: var(--foreground);">Rs. 0.00</span>
+                    </div>
+                    <div class="flex justify-between text-xs sm:text-sm">
+                        <span style="color: var(--text-light);">Shipping</span>
+                        <span id="shipping-amount" style="font-weight: 600; color: var(--accent);">FREE</span>
+                    </div>
+                    <div class="flex justify-between text-xs sm:text-sm">
+                        <span style="color: var(--text-light);">Tax (8%)</span>
+                        <span id="tax-amount" style="font-weight: 600; color: var(--foreground);">Rs. 0.00</span>
+                    </div>
+                    <div class="flex justify-between text-xs sm:text-sm">
+                        <span style="color: var(--text-light);">Discount</span>
+                        <span id="discount-amount" style="font-weight: 600; color: #10b981;">-Rs. 0.00</span>
+                    </div>
+                </div>
+
+                <!-- Total -->
+                <div class="border-t pt-3 sm:pt-4 mb-4 sm:mb-6" style="border-color: var(--border);">
+                    <div class="flex justify-between text-base sm:text-lg">
+                        <span style="font-weight: 700; color: var(--foreground);">Total</span>
+                        <span id="total-amount" style="font-weight: 700; color: var(--accent); font-size: clamp(1rem, 3vw, 1.25rem);">Rs. 0.00</span>
+                    </div>
+                </div>
+
+                <!-- Place Order Button -->
+                <button class="btn-primary w-full mb-2 sm:mb-3 text-xs sm:text-sm py-2 sm:py-3">Place Order</button>
+                <a href="{% url 'store:cart' %}" class="btn-secondary w-full block text-center text-xs sm:text-sm py-2 sm:py-3">← Return to Cart</a>
+
+                <!-- Security Info -->
+                <div class="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t text-center" style="border-color: var(--border);">
+                    <div class="flex items-center justify-center gap-2" style="color: var(--text-light); font-size: 0.75rem; margin-bottom: 0.5rem;">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                        </svg>
+                        <span style="font-weight: 600;">🔒 Secure Checkout</span>
+                    </div>
+                    <p style="color: var(--text-light); font-size: 0.75rem;">Your information is encrypted and secure</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==================== CART & CHECKOUT INTEGRATION ====================
+    const CART_KEY = 'valora_cart';
+    let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+
+    function updateOrderSummary() {
+        const summaryItems = document.getElementById('summary-items');
+        const subtotalAmount = document.getElementById('subtotal-amount');
+        const shippingAmount = document.getElementById('shipping-amount');
+        const taxAmount = document.getElementById('tax-amount');
+        const discountAmount = document.getElementById('discount-amount');
+        const totalAmount = document.getElementById('total-amount');
+
+        if (cart.length === 0) {
+            summaryItems.innerHTML = '<p class="text-xs sm:text-sm" style="color: var(--text-light); text-align: center; padding: 1rem 0;">Your cart is empty</p>';
+            subtotalAmount.textContent = 'Rs. 0.00';
+            taxAmount.textContent = 'Rs. 0.00';
+            totalAmount.textContent = 'Rs. 0.00';
+            return;
+        }
+
+        // Generate items HTML
+        let itemsHTML = '';
+        let subtotal = 0;
+
+        cart.forEach(item => {
+            const itemTotal = item.price * item.quantity;
+            subtotal += itemTotal;
+            itemsHTML += `
+                <div class="flex justify-between text-xs sm:text-sm">
+                    <span style="color: var(--text-light);">${item.name} x ${item.quantity}</span>
+                    <span style="font-weight: 600; color: var(--foreground);">Rs. ${itemTotal.toFixed(2)}</span>
+                </div>
+            `;
+        });
+
+        // Get shipping cost
+        const shippingSelect = document.querySelector('input[name="shipping"]:checked');
+        let shippingCost = 0;
+        let shippingText = 'FREE';
+        if (shippingSelect && shippingSelect.value === 'express') {
+            shippingCost = 500;
+            shippingText = '+Rs. 500';
+        } else if (shippingSelect && shippingSelect.value === 'overnight') {
+            shippingCost = 1200;
+            shippingText = '+Rs. 1,200';
+        }
+
+        // Calculate tax (8%)
+        const tax = (subtotal + shippingCost) * 0.08;
+        const discount = 0; // Placeholder for promo code
+        const total = subtotal + shippingCost + tax - discount;
+
+        // Update DOM
+        summaryItems.innerHTML = itemsHTML;
+        subtotalAmount.textContent = `Rs. ${subtotal.toFixed(2)}`;
+        shippingAmount.textContent = shippingText;
+        shippingAmount.style.color = shippingCost === 0 ? 'var(--accent)' : 'var(--foreground)';
+        taxAmount.textContent = `Rs. ${tax.toFixed(2)}`;
+        discountAmount.textContent = `-Rs. ${discount.toFixed(2)}`;
+        totalAmount.textContent = `Rs. ${total.toFixed(2)}`;
+    }
+
+    // Update summary on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        updateOrderSummary();
+    });
+
+    // Update summary when shipping method changes
+    document.querySelectorAll('input[name="shipping"]').forEach(input => {
+        input.addEventListener('change', updateOrderSummary);
+    });
+
+    // Handle payment method change
+    document.querySelectorAll('input[name="payment"]').forEach(input => {
+        input.addEventListener('change', (e) => {
+            const cardSection = document.getElementById('card-section');
+            if (e.target.value === 'card') {
+                cardSection.style.display = 'block';
+            } else {
+                cardSection.style.display = 'none';
+            }
+        });
+    });
+
+    // Hide non-card payment sections by default
+    document.getElementById('card-section').style.display = 'block';
+
+    // Format card number input (add spaces)
+    document.querySelector('input[placeholder="1234 5678 9012 3456"]').addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\s/g, '');
+        let formattedValue = value.replace(/(\d{4})/g, '$1 ').trim();
+        e.target.value = formattedValue;
+    });
+
+    // Format expiry date input (MM/YY)
+    document.querySelector('input[placeholder="MM/YY"]').addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length >= 2) {
+            value = value.slice(0, 2) + '/' + value.slice(2, 4);
+        }
+        e.target.value = value;
+    });
+</script>
+
+{% endblock %}

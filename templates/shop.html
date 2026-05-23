@@ -1,0 +1,316 @@
+{% extends "base.html" %}
+
+{% block title %}Shop - Valora Beauty{% endblock %}
+
+{% block content %}
+    <!-- Page Header - RESPONSIVE -->
+    <section class="py-12 sm:py-16 border-b" style="border-color: var(--border); background-color: var(--background);">
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+            <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4" style="color: var(--foreground);">Shop Our Collection</h1>
+            <p style="color: var(--text-light); max-width:2xl; text-sm sm:text-base;">Discover our carefully curated selection of luxury beauty products</p>
+        </div>
+    </section>
+
+    <!-- Shop Section - RESPONSIVE -->
+    <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-12 sm:py-16">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8">
+
+            <!-- Sidebar Filters - HIDDEN ON MOBILE, STICKY ON DESKTOP -->
+            <aside class="hidden lg:block lg:col-span-1">
+                <div class="sticky top-24 space-y-8">
+                    <!-- Price Filter -->
+                    <div class="pb-8 border-b" style="border-color: var(--border);">
+                        <h3 class="font-serif text-lg font-semibold mb-4" style="color: var(--foreground);">Price Range</h3>
+                        <div class="space-y-3">
+                            <label class="flex items-center gap-3 cursor-pointer hover:text-accent transition-colors">
+                                <input type="radio" name="price" value="0-2000" class="w-4 h-4" style="accent-color: var(--accent);" 
+                                       onchange="window.location.href='{% url 'store:shop' %}?price=' + this.value;">
+                                <span class="text-sm" style="color: var(--text-light);">Under Rs. 2,000</span>
+                            </label>
+
+                            <label class="flex items-center gap-3 cursor-pointer hover:text-accent transition-colors">
+                                <input type="radio" name="price" value="2000-5000" class="w-4 h-4" style="accent-color: var(--accent);" 
+                                       onchange="window.location.href='{% url 'store:shop' %}?price=' + this.value;">
+                                <span class="text-sm" style="color: var(--text-light);">Rs. 2,000 - Rs. 5,000</span>
+                            </label>
+
+                            <label class="flex items-center gap-3 cursor-pointer hover:text-accent transition-colors">
+                                <input type="radio" name="price" value="5000-10000" class="w-4 h-4" style="accent-color: var(--accent);" 
+                                       onchange="window.location.href='{% url 'store:shop' %}?price=' + this.value;">
+                                <span class="text-sm" style="color: var(--text-light);">Rs. 5,000 - Rs. 10,000</span>
+                            </label>
+
+                            <label class="flex items-center gap-3 cursor-pointer hover:text-accent transition-colors">
+                                <input type="radio" name="price" value="10000+" class="w-4 h-4" style="accent-color: var(--accent);" 
+                                       onchange="window.location.href='{% url 'store:shop' %}?price=' + this.value;">
+                                <span class="text-sm" style="color: var(--text-light);">Over Rs. 10,000</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div>
+                        <h3 class="font-serif text-lg font-semibold mb-4" style="color: var(--foreground);">Category</h3>
+                        <div class="space-y-3">
+                            <a href="{% url 'store:shop' %}" class="flex items-center gap-3 cursor-pointer text-sm transition-colors {% if not request.GET.category %}font-bold text-accent{% else %}hover:text-accent{% endif %}" style="{% if not request.GET.category %}color: var(--accent);{% else %}color: var(--text-light);{% endif %}">
+                                All Products
+                            </a>
+                            <a href="{% url 'store:shop' %}?category=skincare" class="flex items-center gap-3 cursor-pointer text-sm transition-colors {% if request.GET.category == 'skincare' %}font-bold text-accent{% else %}hover:text-accent{% endif %}" style="{% if request.GET.category == 'skincare' %}color: var(--accent);{% else %}color: var(--text-light);{% endif %}">
+                                🧴 Skincare
+                            </a>
+                            <a href="{% url 'store:shop' %}?category=makeup" class="flex items-center gap-3 cursor-pointer text-sm transition-colors {% if request.GET.category == 'makeup' %}font-bold text-accent{% else %}hover:text-accent{% endif %}" style="{% if request.GET.category == 'makeup' %}color: var(--accent);{% else %}color: var(--text-light);{% endif %}">
+                                💄 Makeup
+                            </a>
+                            <a href="{% url 'store:shop' %}?category=fragrance" class="flex items-center gap-3 cursor-pointer text-sm transition-colors {% if request.GET.category == 'fragrance' %}font-bold text-accent{% else %}hover:text-accent{% endif %}" style="{% if request.GET.category == 'fragrance' %}color: var(--accent);{% else %}color: var(--text-light);{% endif %}">
+                                🌟 Fragrance
+                            </a>
+                            <a href="{% url 'store:shop' %}?category=haircare" class="flex items-center gap-3 cursor-pointer text-sm transition-colors {% if request.GET.category == 'haircare' %}font-bold text-accent{% else %}hover:text-accent{% endif %}" style="{% if request.GET.category == 'haircare' %}color: var(--accent);{% else %}color: var(--text-light);{% endif %}">
+                                💆 Haircare
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- ✅ NEW: Active Filters Display -->
+                    {% if request.GET.category or request.GET.price %}
+                    <div class="pt-4 border-t" style="border-color: var(--border);">
+                        <p class="text-xs font-semibold text-gray-500 mb-3 uppercase">Active Filters</p>
+                        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                            {% if request.GET.category %}
+                            <span style="background:rgba(201,160,136,0.15);color:var(--accent);padding:4px 10px;border-radius:20px;font-size:0.75rem;font-weight:600;">
+                                {{ request.GET.category|title }}
+                            </span>
+                            {% endif %}
+                            {% if request.GET.price %}
+                            <span style="background:rgba(201,160,136,0.15);color:var(--accent);padding:4px 10px;border-radius:20px;font-size:0.75rem;font-weight:600;">
+                                Rs. {{ request.GET.price }}
+                            </span>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'store:shop' %}" style="color:var(--accent);font-size:0.75rem;font-weight:600;margin-top:8px;display:inline-block;text-decoration:none;">Clear Filters →</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </aside>
+
+            <!-- Products Grid - RESPONSIVE -->
+            <div class="lg:col-span-3">
+                <!-- ✅ IMPROVED: Filter Summary & Sort Options -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 pb-6 border-b" style="border-color: var(--border);">
+                    <div>
+                        <p class="text-xs sm:text-sm font-semibold" style="color: var(--text-light);">Showing <span style="color: var(--foreground);font-weight:800;">{{ total_products }}</span> products</p>
+                        {% if request.GET.category %}
+                        <p class="text-xs mt-1" style="color: var(--text-light);">Category: <span style="color:var(--accent);font-weight:600;">{{ request.GET.category|title }}</span></p>
+                        {% endif %}
+                    </div>
+                    <select class="input-field text-xs sm:text-sm w-full sm:w-auto" onchange="window.location.href='{% url 'store:shop' %}?sort=' + this.value + '{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}'">
+                        <option value="newest" {% if request.GET.sort == 'newest' or not request.GET.sort %}selected{% endif %}>Sort by: Newest</option>
+                        <option value="price_low_to_high" {% if request.GET.sort == 'price_low_to_high' %}selected{% endif %}>Price: Low to High</option>
+                        <option value="price_high_to_low" {% if request.GET.sort == 'price_high_to_low' %}selected{% endif %}>Price: High to Low</option>
+                        <option value="best_sellers" {% if request.GET.sort == 'best_sellers' %}selected{% endif %}>Best Sellers</option>
+                        <option value="top_rated" {% if request.GET.sort == 'top_rated' %}selected{% endif %}>Top Rated</option>
+                    </select>
+                </div>
+
+                <!-- ✅ UPDATED PRODUCT GRID - RESPONSIVE -->
+                <div class="grid gap-3 sm:gap-4" style="grid-template-columns: repeat(auto-fill, minmax(clamp(100px, 30vw, 150px), 1fr));">
+                    {% for product in products %}
+                    <!-- ✅ PRODUCT CARD WITH WORKING WISHLIST -->
+                    <a href="{% url 'store:product_detail' product.slug %}" style="text-decoration:none;">
+                        <div style="background:white;border-radius:12px;overflow:hidden;border:1px solid var(--border);transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);display:flex;flex-direction:column;height:100%;box-shadow:0 2px 8px rgba(0,0,0,0.04);"
+                             onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 12px 30px rgba(201,160,136,0.15)'"
+                             onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.04)'">
+
+                            <!-- Product Image -->
+                            <div style="position:relative;height:clamp(120px,25vw,180px);background:linear-gradient(135deg,#faf8f6 0%,#ebe7e1 100%);display:flex;align-items:center;justify-content:center;overflow:hidden;">
+                                {% if product.image %}
+                                    <img src="{{ product.image.url }}"
+                                         alt="{{ product.name }}"
+                                         style="width:100%;height:100%;object-fit:cover;">
+                                {% else %}
+                                    <span style="font-size:clamp(1.5rem,4vw,2.5rem);">
+                                        {% if product.category.slug == 'skincare' %}🧴
+                                        {% elif product.category.slug == 'makeup' %}💄
+                                        {% elif product.category.slug == 'fragrance' %}🌟
+                                        {% elif product.category.slug == 'haircare' %}💆
+                                        {% else %}✨{% endif %}
+                                    </span>
+                                {% endif %}
+
+                                <!-- ✅ FIXED: Wishlist Button - NOW WORKING -->
+                                <button 
+                                    type="button"
+                                    onclick="event.preventDefault(); event.stopPropagation(); toggleWishlist({{ product.id }}, '{{ product.name }}', this);"
+                                    style="position:absolute;top:4px;right:4px;background:white;border:none;border-radius:50%;width:clamp(24px,6vw,28px);height:clamp(24px,6vw,28px);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer;font-size:clamp(12px,1.5vw,14px);transition:all 0.2s;"
+                                    onmouseover="this.style.transform='scale(1.15)';this.style.background='#ffe8e8'"
+                                    onmouseout="this.style.transform='scale(1)';this.style.background='white'"
+                                    class="wishlist-btn"
+                                    data-product-id="{{ product.id }}">
+                                    <span class="wishlist-icon">🤍</span>
+                                </button>
+
+                                <!-- Category Badge -->
+                                <div style="position:absolute;top:4px;left:4px;background:rgba(255,255,255,0.95);border-radius:16px;padding:clamp(1px,0.3vw,2px) clamp(6px,1vw,8px);">
+                                    <span style="font-size:clamp(7px,1vw,8px);font-weight:700;text-transform:uppercase;letter-spacing:0.3px;color:#8b6f47;">{{ product.category.name }}</span>
+                                </div>
+
+                                <!-- ✅ Sale Badge -->
+                                {% if product.discount %}
+                                <div style="position:absolute;top:4px;right:32px;background:#c9a088;color:white;border-radius:50%;width:clamp(28px,5vw,32px);height:clamp(28px,5vw,32px);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(8px,1vw,10px);text-align:center;line-height:1.2;">
+                                    {{ product.discount }}%<br>OFF
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Product Info -->
+                            <div style="padding:clamp(8px,1.5vw,12px);flex:1;display:flex;flex-direction:column;justify-content:space-between;">
+                                <div>
+                                    <h3 style="font-family:serif;font-size:clamp(0.7rem,1.5vw,0.85rem);font-weight:700;color:var(--foreground);margin:0 0 4px;line-height:1.2;">{{ product.name|truncatewords:3 }}</h3>
+                                    <p style="color:var(--text-light);font-size:clamp(0.65rem,1vw,0.7rem);margin:0;line-height:1.3;">{{ product.description|truncatewords:5 }}</p>
+                                </div>
+
+                                <div>
+                                    <!-- ✅ IMPROVED: Price Display -->
+                                    <div style="display:flex;align-items:center;gap:6px;margin-bottom:clamp(6px,1vw,8px);">
+                                        <span style="font-size:clamp(0.8rem,2vw,0.9rem);font-weight:800;color:var(--accent);">Rs. {{ product.price }}</span>
+                                        {% if product.original_price and product.original_price > product.price %}
+                                        <span style="font-size:clamp(0.65rem,1.5vw,0.75rem);color:#999;text-decoration:line-through;">Rs. {{ product.original_price }}</span>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Rating -->
+                                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(6px,1vw,8px);gap:4px;">
+                                        <div style="display:flex;gap:1px;">
+                                            {% for i in "12345" %}
+                                                <span style="font-size:clamp(8px,1.2vw,10px);{% if forloop.counter <= product.rating %}color:#f59e0b;{% else %}color:#ddd;{% endif %}">★</span>
+                                            {% endfor %}
+                                        </div>
+                                        <span style="font-size:clamp(0.6rem,0.8vw,0.65rem);color:var(--text-light);">({{ product.rating }})</span>
+                                    </div>
+
+                                    <!-- ✅ Add to Cart Button -->
+                                    <button onclick="event.preventDefault(); event.stopPropagation(); addToCart({{ product.id }}, '{{ product.name }}', {{ product.price }}); openCart();"
+                                            style="width:100%;background:var(--accent);color:white;border:none;border-radius:8px;padding:clamp(6px,1vw,8px);font-weight:700;font-size:clamp(0.7rem,1.2vw,0.75rem);cursor:pointer;transition:all 0.2s;"
+                                            onmouseover="this.style.opacity='0.85';this.style.transform='scale(1.02)'"
+                                            onmouseout="this.style.opacity='1';this.style.transform='scale(1)'">
+                                        Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    {% empty %}
+                    <div style="grid-column:1/-1;text-align:center;padding:clamp(40px,8vw,60px) 20px;">
+                        <p style="font-size:clamp(2rem,5vw,3rem);">🛍️</p>
+                        <p style="color:var(--text-light);margin-top:clamp(8px,2vw,12px);font-size:clamp(0.9rem,2vw,1rem);">No products found.</p>
+                        <a href="{% url 'store:shop' %}" style="color:var(--accent);font-weight:600;text-decoration:none;margin-top:12px;display:inline-block;">Browse All Products →</a>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- ✅ IMPROVED: Pagination -->
+                {% if products %}
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 mt-12 sm:mt-16">
+                    <button class="btn-secondary text-xs sm:text-sm px-4 sm:px-6 py-2" style="width:100%;max-width:140px;">← Previous</button>
+                    <div class="flex gap-1 sm:gap-2 flex-wrap justify-center">
+                        <button class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg text-white font-semibold text-xs sm:text-sm transition-all" style="background:var(--accent);" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">1</button>
+                        <button class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg font-semibold text-xs sm:text-sm transition-all" style="background:var(--border);color:var(--foreground);border:1px solid var(--border);cursor:pointer;" onmouseover="this.style.background='#d0c5ba'" onmouseout="this.style.background='var(--border)'">2</button>
+                        <button class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg font-semibold text-xs sm:text-sm transition-all" style="background:var(--border);color:var(--foreground);border:1px solid var(--border);cursor:pointer;" onmouseover="this.style.background='#d0c5ba'" onmouseout="this.style.background='var(--border)'">3</button>
+                    </div>
+                    <button class="btn-secondary text-xs sm:text-sm px-4 sm:px-6 py-2" style="width:100%;max-width:140px;">Next →</button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @media (max-width: 1024px) {
+            aside {
+                position: relative;
+            }
+        }
+
+        .btn-secondary {
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(201, 160, 136, 0.15);
+        }
+    </style>
+
+    <!-- ✅ WISHLIST JAVASCRIPT -->
+    <script>
+        // ==================== WISHLIST MANAGEMENT ====================
+        const WISHLIST_KEY = 'valora_wishlist';
+        let wishlist = JSON.parse(localStorage.getItem(WISHLIST_KEY)) || [];
+
+        function initializeWishlistUI() {
+            // Update all wishlist buttons on page load
+            document.querySelectorAll('.wishlist-btn').forEach(btn => {
+                const productId = parseInt(btn.dataset.productId);
+                if (wishlist.some(item => item.id === productId)) {
+                    btn.classList.add('in-wishlist');
+                    btn.querySelector('.wishlist-icon').textContent = '❤️';
+                    btn.style.background = '#ffe8e8';
+                } else {
+                    btn.classList.remove('in-wishlist');
+                    btn.querySelector('.wishlist-icon').textContent = '🤍';
+                    btn.style.background = 'white';
+                }
+            });
+            
+            updateWishlistCount();
+        }
+
+        function toggleWishlist(productId, productName, button) {
+            const existingItem = wishlist.findIndex(item => item.id === productId);
+            
+            if (existingItem > -1) {
+                // Remove from wishlist
+                wishlist.splice(existingItem, 1);
+                button.querySelector('.wishlist-icon').textContent = '🤍';
+                button.style.background = 'white';
+                showToast(`💔 ${productName} removed from wishlist`);
+            } else {
+                // Add to wishlist
+                wishlist.push({
+                    id: productId,
+                    name: productName,
+                    addedAt: new Date().toISOString()
+                });
+                button.querySelector('.wishlist-icon').textContent = '❤️';
+                button.style.background = '#ffe8e8';
+                showToast(`❤️ ${productName} added to wishlist!`);
+            }
+            
+            localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlist));
+            updateWishlistCount();
+        }
+
+        function updateWishlistCount() {
+            const wishlistCountElement = document.getElementById('wishlist-count');
+            if (wishlistCountElement) {
+                if (wishlist.length > 0) {
+                    wishlistCountElement.textContent = wishlist.length;
+                    wishlistCountElement.style.display = 'flex';
+                } else {
+                    wishlistCountElement.style.display = 'none';
+                }
+            }
+        }
+
+        function removeFromWishlist(productId) {
+            wishlist = wishlist.filter(item => item.id !== productId);
+            localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlist));
+            initializeWishlistUI();
+            updateWishlistCount();
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeWishlistUI();
+        });
+    </script>
+{% endblock %}

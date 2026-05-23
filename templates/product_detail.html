@@ -1,0 +1,438 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - Valora Beauty{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+        <!-- Product Gallery -->
+        <div>
+            <!-- ✅ OPTIMIZED MAIN IMAGE SIZE -->
+            <div class="bg-white rounded-lg overflow-hidden mb-4 flex items-center justify-center" style="background: linear-gradient(135deg, #fdf5f0 0%, #e8dfd7 100%); height: 450px; max-height: 600px;">
+                <div id="main-image" class="w-full h-full flex items-center justify-center">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width:100%;height:100%;object-fit:contain;max-width:500px;">
+                    {% else %}
+                        <p class="text-gray-400 text-2xl">Product Image</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Thumbnail Gallery -->
+            <div class="grid grid-cols-4 gap-4">
+                <button class="gallery-thumb rounded border-2 border-accent flex items-center justify-center bg-white" style="background: linear-gradient(135deg, #fdf5f0 0%, #e8dfd7 100%);height:100px;aspect-auto;">
+                    <p class="text-xs text-gray-400">View 1</p>
+                </button>
+                <button class="gallery-thumb rounded border-2 border-gray-300 flex items-center justify-center bg-white" style="background: linear-gradient(135deg, #fdf5f0 0%, #e8dfd7 100%);height:100px;aspect-auto;">
+                    <p class="text-xs text-gray-400">View 2</p>
+                </button>
+                <button class="gallery-thumb rounded border-2 border-gray-300 flex items-center justify-center bg-white" style="background: linear-gradient(135deg, #fdf5f0 0%, #e8dfd7 100%);height:100px;aspect-auto;">
+                    <p class="text-xs text-gray-400">View 3</p>
+                </button>
+                <button class="gallery-thumb rounded border-2 border-gray-300 flex items-center justify-center bg-white" style="background: linear-gradient(135deg, #fdf5f0 0%, #e8dfd7 100%);height:100px;aspect-auto;">
+                    <p class="text-xs text-gray-400">View 4</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- Product Info -->
+        <div>
+            <!-- Breadcrumb -->
+            <p class="text-sm text-gray-600 mb-4">
+                <a href="{% url 'store:shop' %}" class="hover-accent">Shop</a> / 
+                <a href="{% url 'store:shop' %}?category={{ product.category.slug }}" class="hover-accent">{{ product.category.name }}</a> / 
+                <span>{{ product.name }}</span>
+            </p>
+
+            <!-- Title & Rating -->
+            <h1 class="font-serif text-4xl font-bold mb-4" style="color:var(--foreground);">{{ product.name }}</h1>
+            
+            <div class="flex items-center gap-4 mb-6">
+                <div class="star-rating">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= product.rating %}
+                        <span class="star filled">★</span>
+                        {% else %}
+                        <span class="star empty">★</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <p class="text-sm" style="color:var(--text-light);">({{ reviews|length }} reviews)</p>
+            </div>
+
+            <!-- Price & Availability -->
+            <div class="border-b pb-6" style="border-color: var(--border);">
+                <p class="text-3xl font-bold mb-4" style="color:var(--accent);">Rs. {{ product.price }}</p>
+                {% if product.stock > 0 %}
+                    <p class="text-sm text-green-600 font-semibold mb-6">✓ In Stock ({{ product.stock }} items)</p>
+                {% else %}
+                    <p class="text-sm text-red-600 font-semibold mb-6">✗ Out of Stock</p>
+                {% endif %}
+
+                <!-- Quantity Selector -->
+                <div class="flex items-center gap-4 mb-6">
+                    <label class="text-sm font-semibold" style="color:var(--foreground);">Quantity:</label>
+                    <div class="flex items-center border" style="border-color: var(--border);">
+                        <button id="qty-minus" class="px-3 py-2 hover:bg-gray-50 transition-colors">−</button>
+                        <input type="number" id="qty-input" value="1" min="1" class="w-12 text-center border-l border-r py-2" style="border-color: var(--border); outline: none;">
+                        <button id="qty-plus" class="px-3 py-2 hover:bg-gray-50 transition-colors">+</button>
+                    </div>
+                </div>
+
+                <!-- Add to Cart Button -->
+                <button 
+                    id="add-to-cart-btn" 
+                    onclick="addProductToCart({{ product.id }}, '{{ product.name }}', {{ product.price }})"
+                    style="width:100%;background:var(--accent);color:white;border:none;border-radius:12px;padding:16px;font-weight:700;font-size:16px;cursor:pointer;transition:all 0.3s;margin-bottom:12px;"
+                    onmouseover="this.style.opacity='0.85';this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 30px rgba(201,160,136,0.3)'"
+                    onmouseout="this.style.opacity='1';this.style.transform='none';this.style.boxShadow='none'"
+                    {% if product.stock == 0 %}disabled style="opacity:0.5;cursor:not-allowed;"{% endif %}
+                >
+                    {% if product.stock > 0 %}Add to Cart{% else %}Out of Stock{% endif %}
+                </button>
+
+                <!-- Wishlist Button -->
+                <button style="width:100%;background:white;color:var(--accent);border:2px solid var(--accent);border-radius:12px;padding:14px;font-weight:700;font-size:16px;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:8px;"
+                        onmouseover="this.style.background='var(--accent)';this.style.color='white'"
+                        onmouseout="this.style.background='white';this.style.color='var(--accent)'">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                    Add to Wishlist
+                </button>
+            </div>
+
+            <!-- Product Info List -->
+            <div class="pt-6 space-y-4">
+                <div class="flex justify-between text-sm">
+                    <span style="color:var(--text-light);">SKU:</span>
+                    <span class="font-semibold" style="color:var(--foreground);">VAL-{{ product.id|stringformat:"05d" }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span style="color:var(--text-light);">Category:</span>
+                    <span class="font-semibold" style="color:var(--foreground);">{{ product.category.name }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span style="color:var(--text-light);">Shipping:</span>
+                    <span class="font-semibold" style="color:var(--foreground);">Free worldwide shipping</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs: Description & Reviews -->
+    <div class="border-t pt-12" style="border-color: var(--border);">
+        <div class="tabs-container mb-8" style="display:flex;gap:30px;border-bottom:2px solid var(--border);padding-bottom:16px;">
+            <button class="tab-button active" data-tab="description" style="padding-bottom:0;border:none;color:var(--accent);font-weight:700;cursor:pointer;background:none;">Description</button>
+            <button class="tab-button" data-tab="reviews" style="padding-bottom:0;border:none;color:var(--text-light);font-weight:700;cursor:pointer;background:none;">Customer Reviews ({{ reviews|length }})</button>
+        </div>
+
+        <!-- Description Tab -->
+        <div id="description" class="tab-content active" style="display:block;">
+            <div class="max-w-3xl">
+                <p style="color:var(--text-light);line-height:1.8;margin-bottom:24px;">{{ product.description }}</p>
+                
+                <h3 class="font-serif text-xl font-semibold mb-4" style="color:var(--foreground);">Key Benefits</h3>
+                <ul class="space-y-2 mb-6">
+                    <li class="flex items-start gap-3">
+                        <span style="color:var(--accent);margin-top:4px;flex-shrink:0;">✓</span>
+                        <span style="color:var(--text-light);">Luxurious formula with premium ingredients</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span style="color:var(--accent);margin-top:4px;flex-shrink:0;">✓</span>
+                        <span style="color:var(--text-light);">Dermatologist tested and approved</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span style="color:var(--accent);margin-top:4px;flex-shrink:0;">✓</span>
+                        <span style="color:var(--text-light);">Cruelty-free and ethically sourced</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span style="color:var(--accent);margin-top:4px;flex-shrink:0;">✓</span>
+                        <span style="color:var(--text-light);">Results visible within 2 weeks</span>
+                    </li>
+                </ul>
+
+                <h3 class="font-serif text-xl font-semibold mb-4" style="color:var(--foreground);">Ingredients</h3>
+                <p style="color:var(--text-light);">Water, Hyaluronic Acid, Glycerin, Squalane, Vitamin C, Retinol, Green Tea Extract, Chamomile Extract, Aloe Vera, Natural Preservatives.</p>
+            </div>
+        </div>
+
+        <!-- Reviews Tab -->
+        <div id="reviews" class="tab-content" style="display:none;">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <!-- Review Form -->
+                <div class="lg:col-span-1">
+                    <h3 class="font-serif text-xl font-semibold mb-6" style="color:var(--foreground);">Write a Review</h3>
+                    <form id="review-form" class="space-y-4">
+                        {% csrf_token %}
+                        
+                        <!-- Star Rating -->
+                        <div>
+                            <label class="text-sm font-semibold block mb-3" style="color:var(--foreground);">Your Rating</label>
+                            <div id="star-rating" class="star-rating cursor-pointer mb-4">
+                                <span class="star empty" data-value="1">★</span>
+                                <span class="star empty" data-value="2">★</span>
+                                <span class="star empty" data-value="3">★</span>
+                                <span class="star empty" data-value="4">★</span>
+                                <span class="star empty" data-value="5">★</span>
+                            </div>
+                            <input type="hidden" id="rating-input" name="rating" value="0">
+                            <p id="rating-text" class="text-sm" style="color:var(--text-light);">Not rated yet</p>
+                        </div>
+
+                        <!-- Name -->
+                        <div>
+                            <label class="text-sm font-semibold block mb-2" style="color:var(--foreground);">Your Name</label>
+                            <input type="text" name="name" class="input-field w-full" placeholder="John Doe" required style="border-color:var(--border);padding:10px;border-radius:8px;">
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label class="text-sm font-semibold block mb-2" style="color:var(--foreground);">Email</label>
+                            <input type="email" name="email" class="input-field w-full" placeholder="your@email.com" required style="border-color:var(--border);padding:10px;border-radius:8px;">
+                        </div>
+
+                        <!-- Title -->
+                        <div>
+                            <label class="text-sm font-semibold block mb-2" style="color:var(--foreground);">Review Title</label>
+                            <input type="text" name="title" class="input-field w-full" placeholder="Highly Recommended!" required style="border-color:var(--border);padding:10px;border-radius:8px;">
+                        </div>
+
+                        <!-- Review Text -->
+                        <div>
+                            <label class="text-sm font-semibold block mb-2" style="color:var(--foreground);">Your Review</label>
+                            <textarea name="review" rows="5" class="input-field w-full" placeholder="Share your experience..." required style="border-color:var(--border);padding:10px;border-radius:8px;"></textarea>
+                        </div>
+
+                        <!-- Verified Checkbox -->
+                        <label class="flex items-center gap-2 text-sm cursor-pointer">
+                            <input type="checkbox" name="verified_purchase" checked>
+                            <span style="color:var(--text-light);">I purchased this product</span>
+                        </label>
+
+                        <button type="submit" style="width:100%;background:var(--accent);color:white;border:none;border-radius:8px;padding:12px;font-weight:700;cursor:pointer;transition:opacity 0.2s;"
+                                onmouseover="this.style.opacity='0.85'"
+                                onmouseout="this.style.opacity='1'">Submit Review</button>
+                    </form>
+                </div>
+
+                <!-- Reviews List -->
+                <div class="lg:col-span-2 space-y-6">
+                    {% if reviews %}
+                        {% for review in reviews %}
+                        <div class="border-b pb-6" style="border-color: var(--border);">
+                            <div class="flex items-start justify-between mb-3">
+                                <div>
+                                    <h4 class="font-semibold" style="color:var(--foreground);">{{ review.title }}</h4>
+                                    <p class="text-sm" style="color:var(--text-light);">by {{ review.author }}</p>
+                                </div>
+                                {% if review.is_verified_purchase %}
+                                <span class="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded">✓ Verified</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="star-rating mb-3">
+                                {% for i in "12345" %}
+                                    {% if i|add:"0" <= review.rating %}
+                                    <span class="star filled">★</span>
+                                    {% else %}
+                                    <span class="star empty">★</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
+                            <p style="color:var(--text-light);font-size:0.95rem;line-height:1.6;margin-bottom:12px;">{{ review.content }}</p>
+                            <p class="text-xs" style="color:var(--text-light);">{{ review.created_at|date:"M d, Y" }}</p>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p style="color:var(--text-light);text-align:center;padding:40px 20px;">No reviews yet. Be the first to review!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    {% if related_products %}
+    <div class="mt-20 border-t pt-16" style="border-color: var(--border);">
+        <h2 class="font-serif text-3xl font-bold mb-12" style="color:var(--foreground);">You Might Also Like</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {% for related in related_products %}
+            <a href="{% url 'store:product_detail' related.slug %}" style="text-decoration:none;">
+                <div class="product-card" style="background:white;border-radius:16px;overflow:hidden;border:1px solid var(--border);transition:all 0.3s;cursor:pointer;display:flex;flex-direction:column;"
+                     onmouseover="this.style.transform='translateY(-8px)';this.style.boxShadow='0 12px 30px rgba(201,160,136,0.15)'"
+                     onmouseout="this.style.transform='none';this.style.boxShadow='none'">
+                    
+                    <div class="bg-white rounded-lg overflow-hidden flex items-center justify-center" style="background: linear-gradient(135deg, #fdf5f0 0%, #e8dfd7 100%);height:180px;">
+                        {% if related.image %}
+                            <img src="{{ related.image.url }}" alt="{{ related.name }}" style="width:100%;height:100%;object-fit:contain;max-width:100%;">
+                        {% else %}
+                            <p class="text-gray-400 text-lg">Product</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div style="padding:16px;flex:1;display:flex;flex-direction:column;justify-content:space-between;">
+                        <div>
+                            <h3 class="font-serif text-lg font-semibold mb-2" style="color:var(--foreground);">{{ related.name }}</h3>
+                            <p style="color:var(--text-light);font-size:0.9rem;margin-bottom:12px;">{{ related.description|truncatewords:8 }}</p>
+                        </div>
+                        
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span style="color:var(--accent);font-weight:800;font-size:1.1rem;">Rs. {{ related.price }}</span>
+                                <div class="star-rating">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= related.rating %}
+                                        <span class="star filled">★</span>
+                                        {% else %}
+                                        <span class="star empty">★</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+</div>
+
+<script>
+    // ==================== QUANTITY SELECTOR ====================
+    const qtyInput = document.getElementById('qty-input');
+    const qtyMinus = document.getElementById('qty-minus');
+    const qtyPlus = document.getElementById('qty-plus');
+
+    qtyMinus.addEventListener('click', () => {
+        qtyInput.value = Math.max(1, parseInt(qtyInput.value) - 1);
+    });
+
+    qtyPlus.addEventListener('click', () => {
+        qtyInput.value = parseInt(qtyInput.value) + 1;
+    });
+
+    qtyInput.addEventListener('change', () => {
+        qtyInput.value = Math.max(1, parseInt(qtyInput.value) || 1);
+    });
+
+    // ==================== TABS ====================
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const tabName = button.getAttribute('data-tab');
+            
+            tabButtons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.color = 'var(--text-light)';
+            });
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                content.style.display = 'none';
+            });
+            
+            button.classList.add('active');
+            button.style.color = 'var(--accent)';
+            document.getElementById(tabName).classList.add('active');
+            document.getElementById(tabName).style.display = 'block';
+        });
+    });
+
+    // ==================== STAR RATING ====================
+    const starRating = document.getElementById('star-rating');
+    const stars = starRating ? starRating.querySelectorAll('.star') : [];
+    const ratingInput = document.getElementById('rating-input');
+    const ratingText = document.getElementById('rating-text');
+    const ratingLabels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            const value = star.getAttribute('data-value');
+            ratingInput.value = value;
+            ratingText.textContent = ratingLabels[value];
+
+            stars.forEach((s, index) => {
+                if (index < value) {
+                    s.classList.remove('empty');
+                    s.classList.add('filled');
+                } else {
+                    s.classList.add('empty');
+                    s.classList.remove('filled');
+                }
+            });
+        });
+
+        star.addEventListener('mouseenter', () => {
+            const value = star.getAttribute('data-value');
+            stars.forEach((s, index) => {
+                if (index < value) {
+                    s.style.color = '#f59e0b';
+                } else {
+                    s.style.color = '#e5e7eb';
+                }
+            });
+        });
+    });
+
+    if (starRating) {
+        starRating.addEventListener('mouseleave', () => {
+            const currentRating = parseInt(ratingInput.value) || 0;
+            stars.forEach((star, index) => {
+                star.style.color = index < currentRating ? '#f59e0b' : '#e5e7eb';
+            });
+        });
+    }
+
+    // ==================== REVIEW FORM SUBMISSION ====================
+    const reviewForm = document.getElementById('review-form');
+    if (reviewForm) {
+        reviewForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const rating = document.getElementById('rating-input').value;
+            if (!rating) {
+                alert('Please select a rating');
+                return;
+            }
+
+            alert('Thank you! Your review has been submitted.');
+            reviewForm.reset();
+            document.getElementById('rating-input').value = '0';
+            ratingText.textContent = 'Not rated yet';
+            stars.forEach(star => {
+                star.classList.add('empty');
+                star.classList.remove('filled');
+            });
+        });
+    }
+
+    // ==================== ADD TO CART ====================
+    function addProductToCart(productId, productName, productPrice) {
+        const quantity = parseInt(document.getElementById('qty-input').value) || 1;
+        
+        for (let i = 0; i < quantity; i++) {
+            addToCart(productId, productName, productPrice);
+        }
+
+        document.getElementById('qty-input').value = '1';
+    }
+
+    // ==================== GALLERY THUMBNAILS ====================
+    const galleryThumbs = document.querySelectorAll('.gallery-thumb');
+    galleryThumbs.forEach((thumb, index) => {
+        thumb.addEventListener('click', () => {
+            galleryThumbs.forEach(t => {
+                t.style.borderColor = 'var(--border)';
+            });
+            thumb.style.borderColor = 'var(--accent)';
+        });
+    });
+</script>
+
+{% endblock %}

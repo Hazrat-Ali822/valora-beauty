@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}My Wishlist - Valora Beauty{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <!-- Page Header -->
+    <div class="mb-12">
+        <h1 class="section-title">My Wishlist</h1>
+        <p class="text-gray-600">Items you're interested in</p>
+    </div>
+
+    {% if products %}
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {% for product in products %}
+        <div class="product-card bg-white border rounded-lg overflow-hidden hover:shadow-lg transition-shadow" style="border-color: var(--border);">
+            <div class="relative bg-gray-100 h-64 flex items-center justify-center overflow-hidden">
+                <div class="text-center text-gray-400">
+                    <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <button class="absolute top-4 right-4 text-red-500 hover:text-red-600 transition-colors bg-white rounded-full p-2 shadow-md">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-500 mb-2">{{ product.category }}</p>
+                <h3 class="font-serif text-lg font-semibold mb-2 text-balance">{{ product.name }}</h3>
+                <p class="text-sm text-gray-600 mb-4">{{ product.description }}</p>
+                <div class="flex items-center justify-between mb-4">
+                    <p class="text-2xl font-semibold text-accent">${{ product.price }}</p>
+                    <div class="flex">
+                        {% for i in "12345" %}
+                        {% if i|add:"0" <= product.rating %}
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.381-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <button onclick="addToCart({{ product.id }}, '{{ product.name }}', {{ product.price }})" class="btn-primary w-full text-center">Add to Cart</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-20">
+        <svg class="w-20 h-20 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+        </svg>
+        <h2 class="font-serif text-2xl font-semibold mb-2">Your wishlist is empty</h2>
+        <p class="text-gray-600 mb-8">Start adding items to your wishlist</p>
+        <a href="{% url 'store:shop' %}" class="btn-primary inline-block">Continue Shopping</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

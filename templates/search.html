@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results - Valora Beauty{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-12 sm:py-16">
+    
+    <!-- Page Header -->
+    <div class="mb-8 sm:mb-12">
+        <p class="text-xs sm:text-sm" style="color: var(--text-light); margin-bottom: 1rem;">
+            <a href="{% url 'store:home' %}" class="hover:text-accent">Home</a> / 
+            <span class="text-accent font-semibold">Search Results</span>
+        </p>
+        
+        <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold mb-3" style="color: var(--foreground);">
+            Search Results
+        </h1>
+        
+        {% if query %}
+        <p style="color: var(--text-light); font-size: clamp(0.9rem, 2vw, 1.1rem);">
+            Found <span style="font-weight: 800; color: var(--accent);">{{ total_products }}</span> 
+            results for "<span style="font-weight: 600;">{{ query }}</span>"
+        </p>
+        {% else %}
+        <p style="color: var(--text-light); font-size: clamp(0.9rem, 2vw, 1.1rem);">
+            Enter a search term to find products
+        </p>
+        {% endif %}
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8">
+        
+        <!-- Search Filters Sidebar -->
+        <aside class="hidden lg:block lg:col-span-1">
+            <div class="sticky top-24 space-y-6 sm:space-y-8">
+                
+                <!-- Search Box -->
+                <div class="pb-6 sm:pb-8 border-b" style="border-color: var(--border);">
+                    <h3 class="font-serif text-lg font-semibold mb-4" style="color: var(--foreground);">Refine Search</h3>
+                    <form method="GET" action="{% url 'store:search' %}">
+                        <input 
+                            type="text" 
+                            name="q" 
+                            value="{{ query }}" 
+                            placeholder="Search products..." 
+                            class="input-field w-full mb-3"
+                            required
+                        >
+                        <button type="submit" class="btn-primary w-full text-sm">🔍 Search</button>
+                    </form>
+                </div>
+
+                <!-- Category Filter -->
+                <div class="pb-6 sm:pb-8 border-b" style="border-color: var(--border);">
+                    <h3 class="font-serif text-lg font-semibold mb-4" style="color: var(--foreground);">Category</h3>
+                    <div class="space-y-2">
+                        <a href="?q={{ query }}" class="text-sm {% if not category_filter %}font-bold text-accent{% else %}hover:text-accent{% endif %}" style="display: block; color: {% if not category_filter %}var(--accent){% else %}var(--text-light){% endif %};">
+                            All Categories
+                        </a>
+                        {% for category in categories %}
+                        <a href="?q={{ query }}&category={{ category.slug }}" class="text-sm {% if category_filter == category.slug %}font-bold text-accent{% else %}hover:text-accent{% endif %}" style="display: block; color: {% if category_filter == category.slug %}var(--accent){% else %}var(--text-light){% endif %};">
+                            {{ category.name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Price Filter -->
+                <div>
+                    <h3 class="font-serif text-lg font-semibold mb-4" style="color: var(--foreground);">Price Range</h3>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-3 cursor-pointer hover:text-accent transition-colors text-sm">
+                            <input type="radio" name="price" value="" onchange="window.location.href='?q={{ query }}&category={{ category_filter }}'" {% if not price_filter %}checked{% endif %} style="accent-color: var(--accent);">
+                            <span>All Prices</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer hover:text-accent transition-colors text-sm">
+                            <input type="radio" name="price" value="0-2000" onchange="window.location.href='?q={{ query }}&price=0-2000&category={{ category_filter }}'" {% if price_filter == '0-2000' %}checked{% endif %} style="accent-color: var(--accent);">
+                            <span>Under Rs. 2,000</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer hover:text-accent transition-colors text-sm">
+                            <input type="radio" name="price" value="2000-5000" onchange="window.location.href='?q={{ query }}&price=2000-5000&category={{ category_filter }}'" {% if price_filter == '2000-5000' %}checked{% endif %} style="accent-color: var(--accent);">
+                            <span>Rs. 2,000 - Rs. 5,000</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer hover:text-accent transition-colors text-sm">
+                            <input type="radio" name="price" value="5000-10000" onchange="window.location.href='?q={{ query }}&price=5000-10000&category={{ category_filter }}'" {% if price_filter == '5000-10000' %}checked{% endif %} style="accent-color: var(--accent);">
+                            <span>Rs. 5,000 - Rs. 10,000</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer hover:text-accent transition-colors text-sm">
+                            <input type="radio" name="price" value="10000+" onchange="window.location.href='?q={{ query }}&price=10000%2B&category={{ category_filter }}'" {% if price_filter == '10000+' %}checked{% endif %} style="accent-color: var(--accent);">
+                            <span>Over Rs. 10,000</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Search Results Grid -->
+        <div class="lg:col-span-3">
+            
+            <!-- Sort Options -->
+            <div class="mb-6 sm:mb-8 pb-4 sm:pb-6 border-b flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between" style="border-color: var(--border);">
+                <p class="text-xs sm:text-sm" style="color: var(--text-light);">
+                    Showing <span style="font-weight: 800; color: var(--foreground);">{{ total_products }}</span> products
+                </p>
+                <select onchange="window.location.href='?q={{ query }}&sort=' + this.value + '&category={{ category_filter }}&price={{ price_filter }}'" class="input-field text-xs sm:text-sm">
+                    <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Sort by: Newest</option>
+                    <option value="price_low_to_high" {% if sort_by == 'price_low_to_high' %}selected{% endif %}>Price: Low to High</option>
+                    <option value="price_high_to_low" {% if sort_by == 'price_high_to_low' %}selected{% endif %}>Price: High to Low</option>
+                    <option value="top_rated" {% if sort_by == 'top_rated' %}selected{% endif %}>Top Rated</option>
+                </select>
+            </div>
+
+            <!-- Products Grid -->
+            {% if products %}
+            <div class="grid gap-3 sm:gap-4" style="grid-template-columns: repeat(auto-fill, minmax(clamp(100px, 30vw, 150px), 1fr));">
+                {% for product in products %}
+                <a href="{% url 'store:product_detail' product.slug %}" style="text-decoration:none;">
+                    <div style="background:white;border-radius:12px;overflow:hidden;border:1px solid var(--border);transition:all 0.3s;display:flex;flex-direction:column;height:100%;"
+                         onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 12px 30px rgba(201,160,136,0.15)'"
+                         onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.04)'">
+                        
+                        <!-- Product Image -->
+                        <div style="position:relative;height:clamp(120px,25vw,180px);background:linear-gradient(135deg,#faf8f6 0%,#ebe7e1 100%);display:flex;align-items:center;justify-content:center;">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width:100%;height:100%;object-fit:cover;">
+                            {% else %}
+                                <span style="font-size:clamp(1.5rem,4vw,2.5rem);">
+                                    {% if product.category.slug == 'skincare' %}🧴
+                                    {% elif product.category.slug == 'makeup' %}💄
+                                    {% elif product.category.slug == 'fragrance' %}🌟
+                                    {% else %}✨{% endif %}
+                                </span>
+                            {% endif %}
+                            
+                            <!-- Category Badge -->
+                            <div style="position:absolute;top:4px;left:4px;background:rgba(255,255,255,0.95);border-radius:16px;padding:2px 8px;">
+                                <span style="font-size:8px;font-weight:700;text-transform:uppercase;color:#8b6f47;">{{ product.category.name }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Product Info -->
+                        <div style="padding:clamp(8px,1.5vw,12px);flex:1;display:flex;flex-direction:column;justify-content:space-between;">
+                            <div>
+                                <h3 style="font-family:serif;font-size:clamp(0.7rem,1.5vw,0.85rem);font-weight:700;color:var(--foreground);margin:0 0 4px;">{{ product.name|truncatewords:3 }}</h3>
+                                <p style="color:var(--text-light);font-size:clamp(0.65rem,1vw,0.7rem);margin:0;">{{ product.description|truncatewords:5 }}</p>
+                            </div>
+                            
+                            <div>
+                                <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+                                    <span style="font-size:clamp(0.8rem,2vw,0.9rem);font-weight:800;color:var(--accent);">Rs. {{ product.price }}</span>
+                                </div>
+                                <div style="display:flex;gap:1px;">
+                                    {% for i in "12345" %}
+                                        <span style="font-size:10px;{% if forloop.counter <= product.rating %}color:#f59e0b;{% else %}color:#ddd;{% endif %}">★</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div style="text-align:center;padding:clamp(40px,8vw,60px) 20px;">
+                <p style="font-size:clamp(2rem,5vw,3rem);margin:0;">🔍</p>
+                <p style="color:var(--text-light);margin-top:clamp(8px,2vw,12px);font-size:clamp(0.9rem,2vw,1rem);">No products found matching your search.</p>
+                <a href="{% url 'store:shop' %}" style="color:var(--accent);font-weight:600;text-decoration:none;margin-top:12px;display:inline-block;">Browse All Products →</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
