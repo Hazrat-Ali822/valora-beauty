@@ -1,9 +1,9 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}About Us - Valora Beauty{% endblock %}
 
 {% block content %}
-    <!-- ✅ IMPROVED: Hero Section - RESPONSIVE -->
     <section class="py-12 sm:py-16 md:py-24 border-b" style="border-color: var(--border); background: linear-gradient(135deg, #f9f7f4 0%, #ebe7e1 100%);">
         <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-center">
@@ -14,17 +14,21 @@
                     <p style="font-size:clamp(0.9rem,2vw,1.1rem); color:var(--text-light); line-height:1.7;">Every product in our collection tells a story of innovation, sustainability, and unwavering commitment to quality.</p>
                 </div>
                 
-                <!-- ✅ IMPROVED: About Image Box -->
-                <div class="relative rounded-lg overflow-hidden transition-all duration-500" style="height:clamp(250px,50vw,400px); background: linear-gradient(135deg, #d8a572 0%, #a67c52 100%); box-shadow: 0 20px 40px rgba(166, 124, 82, 0.2);" onmouseover="this.style.transform='translateY(-10px)';this.style.boxShadow='0 30px 60px rgba(166, 124, 82, 0.3)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 20px 40px rgba(166, 124, 82, 0.2)'">
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <p style="color: white; font-size:clamp(1.2rem,3vw,1.8rem); font-family:serif; font-weight:600;">About Image</p>
-                    </div>
-                </div>
+    <div class="relative rounded-2xl overflow-hidden transition-all duration-500 shadow-xl" 
+     style="height:clamp(250px,40vw,400px); box-shadow: 0 20px 40px rgba(166, 124, 82, 0.2);" 
+     onmouseover="this.style.transform='translateY(-10px)';this.style.boxShadow='0 30px 60px rgba(166, 124, 82, 0.3)'" 
+     onmouseout="this.style.transform='none';this.style.boxShadow='0 20px 40px rgba(166, 124, 82, 0.2)'">
+    
+    <img src="{% static 'images/your-logo.jpeg' %}" 
+         alt="Valora Beauty Experience" 
+         class="w-full h-full object-cover transition-transform duration-700 hover:scale-105">
+    
+    <div class="absolute inset-0 bg-black/10"></div>
+</div>
             </div>
         </div>
     </section>
 
-    <!-- ✅ IMPROVED: Mission, Vision, Values - RESPONSIVE -->
     <section class="py-12 sm:py-16 md:py-24">
         <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
             <div style="text-align:center;margin-bottom:clamp(32px,6vw,48px);">
@@ -32,36 +36,25 @@
             </div>
             
             <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:clamp(24px, 4vw, 40px);">
-                
-                <!-- Mission -->
                 <div style="text-align:center; transition:all 0.3s;" onmouseover="this.style.transform='translateY(-12px)'" onmouseout="this.style.transform='none'">
                     <div style="width:clamp(60px, 10vw, 80px); height:clamp(60px, 10vw, 80px); background:#c9a088; border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto clamp(16px, 3vw, 24px);">
-                        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                        </svg>
+                        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </div>
                     <h3 class="font-serif font-semibold mb-3 sm:mb-4" style="font-size:clamp(1.2rem,3vw,1.5rem); color:var(--foreground);">Mission</h3>
                     <p style="font-size:clamp(0.85rem,1.8vw,0.95rem); color:var(--text-light); line-height:1.7;">To empower individuals to feel confident and beautiful by providing luxury beauty products that are ethically sourced, scientifically formulated, and genuinely effective.</p>
                 </div>
                 
-                <!-- Vision -->
                 <div style="text-align:center; transition:all 0.3s;" onmouseover="this.style.transform='translateY(-12px)'" onmouseout="this.style.transform='none'">
                     <div style="width:clamp(60px, 10vw, 80px); height:clamp(60px, 10vw, 80px); background:#c9a088; border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto clamp(16px, 3vw, 24px);">
-                        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                        </svg>
+                        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                     </div>
                     <h3 class="font-serif font-semibold mb-3 sm:mb-4" style="font-size:clamp(1.2rem,3vw,1.5rem); color:var(--foreground);">Vision</h3>
-                    <p style="font-size:clamp(0.85rem,1.8vw,0.95rem); color:var(--text-light); line-height:1.7;">To become the world&apos;s most trusted luxury beauty brand, recognized for innovation, sustainability, and our unwavering commitment to celebrating diverse beauty.</p>
+                    <p style="font-size:clamp(0.85rem,1.8vw,0.95rem); color:var(--text-light); line-height:1.7;">To become the world's most trusted luxury beauty brand, recognized for innovation, sustainability, and our unwavering commitment to celebrating diverse beauty.</p>
                 </div>
                 
-                <!-- Values -->
                 <div style="text-align:center; transition:all 0.3s;" onmouseover="this.style.transform='translateY(-12px)'" onmouseout="this.style.transform='none'">
                     <div style="width:clamp(60px, 10vw, 80px); height:clamp(60px, 10vw, 80px); background:#c9a088; border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto clamp(16px, 3vw, 24px);">
-                        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m7 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
+                        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m7 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
                     <h3 class="font-serif font-semibold mb-3 sm:mb-4" style="font-size:clamp(1.2rem,3vw,1.5rem); color:var(--foreground);">Values</h3>
                     <p style="font-size:clamp(0.85rem,1.8vw,0.95rem); color:var(--text-light); line-height:1.7;">Quality, integrity, sustainability, inclusivity, and innovation guide every decision we make. We believe beauty should never compromise ethics or the environment.</p>
@@ -70,112 +63,33 @@
         </div>
     </section>
 
-    <!-- ✅ IMPROVED: Highlights Section - RESPONSIVE -->
     <section class="py-12 sm:py-16 md:py-24 border-t" style="border-color: var(--border); background: linear-gradient(135deg, #f9f7f4 0%, #ebe7e1 100%);">
         <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-center">
-                
-                <!-- Stats Grid -->
                 <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:clamp(24px, 4vw, 32px);">
-                    <div style="text-align:center; padding:clamp(16px, 3vw, 24px); background:white; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.05); transition:all 0.3s;" onmouseover="this.style.transform='translateY(-8px)';this.style.boxShadow='0 12px 30px rgba(0,0,0,0.12)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 15px rgba(0,0,0,0.05)'">
+                    <div style="text-align:center; padding:clamp(16px, 3vw, 24px); background:white; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.05);">
                         <p class="font-serif font-bold text-accent mb-2" style="font-size:clamp(1.8rem,4vw,2.5rem);">500K+</p>
                         <p style="color:var(--text-light); font-size:clamp(0.8rem,1.5vw,0.9rem); font-weight:600;">Happy Customers</p>
                     </div>
-                    
-                    <div style="text-align:center; padding:clamp(16px, 3vw, 24px); background:white; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.05); transition:all 0.3s;" onmouseover="this.style.transform='translateY(-8px)';this.style.boxShadow='0 12px 30px rgba(0,0,0,0.12)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 15px rgba(0,0,0,0.05)'">
+                    <div style="text-align:center; padding:clamp(16px, 3vw, 24px); background:white; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.05);">
                         <p class="font-serif font-bold text-accent mb-2" style="font-size:clamp(1.8rem,4vw,2.5rem);">98%</p>
                         <p style="color:var(--text-light); font-size:clamp(0.8rem,1.5vw,0.9rem); font-weight:600;">Satisfaction Rate</p>
                     </div>
-                    
-                    <div style="text-align:center; padding:clamp(16px, 3vw, 24px); background:white; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.05); transition:all 0.3s;" onmouseover="this.style.transform='translateY(-8px)';this.style.boxShadow='0 12px 30px rgba(0,0,0,0.12)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 15px rgba(0,0,0,0.05)'">
+                    <div style="text-align:center; padding:clamp(16px, 3vw, 24px); background:white; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.05);">
                         <p class="font-serif font-bold text-accent mb-2" style="font-size:clamp(1.8rem,4vw,2.5rem);">50+</p>
                         <p style="color:var(--text-light); font-size:clamp(0.8rem,1.5vw,0.9rem); font-weight:600;">Premium Brands</p>
                     </div>
-                    
-                    <div style="text-align:center; padding:clamp(16px, 3vw, 24px); background:white; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.05); transition:all 0.3s;" onmouseover="this.style.transform='translateY(-8px)';this.style.boxShadow='0 12px 30px rgba(0,0,0,0.12)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 15px rgba(0,0,0,0.05)'">
+                    <div style="text-align:center; padding:clamp(16px, 3vw, 24px); background:white; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.05);">
                         <p class="font-serif font-bold text-accent mb-2" style="font-size:clamp(1.8rem,4vw,2.5rem);">100%</p>
                         <p style="color:var(--text-light); font-size:clamp(0.8rem,1.5vw,0.9rem); font-weight:600;">Authentic</p>
                     </div>
                 </div>
                 
-                <!-- Content -->
                 <div>
                     <h2 class="font-serif font-bold mb-4 sm:mb-6" style="font-size:clamp(1.5rem,4vw,2.5rem); color:var(--foreground);">By The Numbers</h2>
-                    <p style="font-size:clamp(0.9rem,2vw,1rem); color:var(--text-light); margin-bottom:clamp(16px, 3vw, 24px); line-height:1.7;">Since our founding, we&apos;ve been dedicated to excellence. Our customers trust us for authenticity, quality, and an unparalleled shopping experience. These numbers reflect our commitment to providing the best luxury beauty products available.</p>
-                    
-                    <ul style="display:flex; flex-direction:column; gap:clamp(12px, 2vw, 16px);">
-                        <li style="display:flex; gap:12px; align-items:flex-start;">
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-accent flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span style="color:var(--text-light); font-size:clamp(0.85rem,1.8vw,0.95rem); line-height:1.6;">Ethically sourced ingredients from trusted suppliers</span>
-                        </li>
-                        
-                        <li style="display:flex; gap:12px; align-items:flex-start;">
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-accent flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span style="color:var(--text-light); font-size:clamp(0.85rem,1.8vw,0.95rem); line-height:1.6;">Cruelty-free and eco-friendly packaging</span>
-                        </li>
-                        
-                        <li style="display:flex; gap:12px; align-items:flex-start;">
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-accent flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span style="color:var(--text-light); font-size:clamp(0.85rem,1.8vw,0.95rem); line-height:1.6;">Scientifically formulated for maximum efficacy</span>
-                        </li>
-                        
-                        <li style="display:flex; gap:12px; align-items:flex-start;">
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-accent flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span style="color:var(--text-light); font-size:clamp(0.85rem,1.8vw,0.95rem); line-height:1.6;">Dedicated customer support and beauty consultations</span>
-                        </li>
-                    </ul>
+                    <p style="font-size:clamp(0.9rem,2vw,1rem); color:var(--text-light); margin-bottom:clamp(16px, 3vw, 24px); line-height:1.7;">Since our founding, we've been dedicated to excellence. Our customers trust us for authenticity, quality, and an unparalleled shopping experience.</p>
                 </div>
             </div>
         </div>
     </section>
-
- 
-    <!-- ✅ IMPROVED: Newsletter Section - RESPONSIVE -->
-    <section class="py-12 sm:py-16 md:py-20" style="background: linear-gradient(135deg, var(--foreground) 0%, rgba(74, 55, 40, 0.95) 100%); border-top:1px solid var(--border);">
-        <div class="max-w-2xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 text-center">
-            <h2 class="font-serif font-bold text-white mb-3 sm:mb-4" style="font-size:clamp(1.5rem,5vw,2.5rem);">Join Our Community</h2>
-            <p style="color:rgba(255,255,255,0.85); margin-bottom:clamp(20px,4vw,32px); font-size:clamp(0.9rem,2vw,1rem); line-height:1.6;">Subscribe to get insider updates, exclusive launches, and beauty tips from our experts.</p>
-            
-            <!-- ✅ Newsletter Form -->
-            <form style="display:flex; gap:clamp(8px, 2vw, 12px); max-width:480px; margin:0 auto; flex-direction:column;">
-                <div style="display:flex; gap:clamp(8px, 2vw, 12px); flex-direction:row;">
-                    <input type="email" placeholder="Your email" style="flex:1; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:white; border-radius:8px; padding:clamp(10px, 2vw, 14px) clamp(14px, 2.5vw, 20px); font-size:clamp(0.85rem, 1.5vw, 0.95rem); outline:none; transition:all 0.3s; backdrop-filter:blur(8px);" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'" required>
-                    <button type="submit" style="background:#c9a088; color:white; border:none; border-radius:8px; padding:clamp(10px, 2vw, 14px) clamp(20px, 4vw, 28px); font-weight:700; cursor:pointer; white-space:nowrap; transition:all 0.3s; font-size:clamp(0.85rem, 1.5vw, 0.95rem);" onmouseover="this.style.opacity='0.9';this.style.transform='translateY(-2px)'" onmouseout="this.style.opacity='1';this.style.transform='none'">Subscribe</button>
-                </div>
-                <p style="color:rgba(255,255,255,0.7); font-size:clamp(0.75rem, 1.2vw, 0.8rem); margin-top:8px;">We respect your privacy. Unsubscribe at any time.</p>
-            </form>
-        </div>
-    </section>
-
-    <style>
-        /* ✅ Smooth transitions for all interactive elements */
-        * {
-            transition: all 0.3s ease;
-        }
-
-        /* ✅ Better mobile responsiveness */
-        @media (max-width: 640px) {
-            div[style*="gap:clamp"] {
-                gap: 12px !important;
-            }
-        }
-
-        /* ✅ Accessibility improvements */
-        input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        input:focus {
-            background: rgba(255, 255, 255, 0.25) !important;
-            border-color: rgba(255, 255, 255, 0.5) !important;
-        }
-    </style>
 {% endblock %}

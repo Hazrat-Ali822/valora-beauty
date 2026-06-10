@@ -115,15 +115,13 @@ class SliderImage(models.Model):
         ('makeup', 'Makeup'),
         ('ordinary', 'The Ordinary'),
     ]
-    title = models.CharField(max_length=200)
-    slide_type = models.CharField(max_length=20, choices=SLIDER_CHOICES, unique=True)
+    title = models.CharField(max_length=200, default='')
+    slide_type = models.CharField(max_length=50, default='general')
     image = models.ImageField(upload_to='sliders/')
     alt_text = models.CharField(max_length=200, blank=True)
     description = models.TextField(blank=True)
     order = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = 'ecommerce_slider'

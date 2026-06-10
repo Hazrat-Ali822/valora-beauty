@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Valora Admin</title>
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+    </head>
+<body>
+    <div class="admin-container">
+        <nav class="sidebar">
+            <h1>Valora Beauty Admin</h1>
+            <ul>
+                <li><a href="{% url 'store:admin_dashboard' %}">Dashboard</a></li>
+                </ul>
+        </nav>
+
+        <main class="content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

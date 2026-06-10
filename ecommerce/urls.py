@@ -4,6 +4,7 @@ from . import views
 app_name = 'store'
 
 urlpatterns = [
+    path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
     # Pages
     path('', views.home, name='home'),
     
@@ -34,4 +35,9 @@ urlpatterns = [
 
     # Profile
     path('profile/', views.profile, name='profile'),
+    path('admin/product/add/', views.admin_add_product, name='admin_add_product'),
+    path('admin/category/add/', views.admin_add_category, name='admin_add_category'),
+    
+
+     
 ]
