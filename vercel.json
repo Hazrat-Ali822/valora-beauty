@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "valora_beauty/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "valora_beauty/wsgi.py"
+    }
+  ]
+}
