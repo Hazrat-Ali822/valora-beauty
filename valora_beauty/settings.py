@@ -8,7 +8,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-this-in-produc
 
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*']
+# settings.py
+ALLOWED_HOSTS = [
+    'valora-beauty.vercel.app',  # Aapka Vercel Domain
+    'localhost',
+    '127.0.0.1.8000'
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
